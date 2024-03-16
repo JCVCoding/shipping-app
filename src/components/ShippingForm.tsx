@@ -1,6 +1,7 @@
 import { Button, MenuItem, Stack, TextField } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { usaStates } from 'typed-usa-states';
 
 const ShippingForm = () => {
@@ -172,7 +173,13 @@ const ShippingForm = () => {
         display={'flex'}
         justifyContent={'center'}
       >
-        <Button sx={{ width: 1 / 2 }} variant='contained' type='submit'>
+        <Button
+          sx={{ width: 1 / 2 }}
+          component={Link}
+          to='/ship-details'
+          variant='contained'
+          type='submit'
+        >
           Continue
         </Button>
       </Grid>

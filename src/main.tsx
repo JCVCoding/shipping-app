@@ -7,10 +7,12 @@ import App from './App.tsx';
 import ShipPage from './pages/ship.tsx';
 
 import './index.css';
+import ShipDetails from './pages/shipDetails.tsx';
 
 const router = createBrowserRouter([
   { path: '/', element: <App /> },
   { path: '/ship', element: <ShipPage /> },
+  { path: '/ship-details', element: <ShipDetails /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
