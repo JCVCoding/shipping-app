@@ -6,10 +6,7 @@ export const ShipmentCard = () => {
   return (
     <Card>
       <CardContent sx={{ p: 4 }}>
-        <Grid
-          container
-          sx={{ fontWeight: 500, fontSize: 24, fontFamily: 'sans-serif' }}
-        >
+        <Grid container sx={{ fontWeight: 500, fontSize: 24 }}>
           <Grid xs={12}>
             <p>Service Type</p>
           </Grid>

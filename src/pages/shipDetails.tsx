@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Button, Card, CardContent } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -9,9 +10,7 @@ const ShipDetails = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Card>
-        <CardContent
-          sx={{ fontWeight: 500, fontSize: 24, fontFamily: 'sans-serif' }}
-        >
+        <CardContent sx={{ fontWeight: 500, fontSize: 24 }}>
           <p>Shipper Details</p>
           <p>Receiver Details</p>
           <p>Package Details</p>
@@ -20,7 +19,9 @@ const ShipDetails = () => {
           <p>Selected Service</p>
           <p>Delivery Date and Time</p>
           <p>Price</p>
-          <Button variant='contained'>Continue to Payment</Button>
+          <Button variant='contained' component={Link} to='/payment'>
+            Continue to Payment
+          </Button>
         </CardContent>
       </Card>
     </LocalizationProvider>
