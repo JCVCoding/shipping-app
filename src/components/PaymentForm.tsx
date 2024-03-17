@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   Button,
@@ -181,7 +182,13 @@ const PaymentForm = () => {
           </Grid>
         ) : null}
         <Grid xs={12} display={'flex'} justifyContent={'center'} sx={{ mt: 1 }}>
-          <Button fullWidth variant='contained' type='submit'>
+          <Button
+            fullWidth
+            variant='contained'
+            type='submit'
+            component={Link}
+            to='/confirmation'
+          >
             Pay
           </Button>
         </Grid>
