@@ -6,8 +6,10 @@ import { usaStates } from 'typed-usa-states';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { updateFromZIP } from '../features/fromZIP/fromZIPSlice';
 import { updateToZIP } from '../features/toZIP/toZIPSlice';
+import { updateShipForm } from '../features/ship/shipSlice';
 
 const ShippingForm = () => {
+  const ship = useAppSelector((state) => state.ship);
   const toZIP = useAppSelector((state) => state.toZIP.value);
   const fromZIP = useAppSelector((state) => state.fromZIP.value);
   const dispatch = useAppDispatch();
@@ -25,6 +27,13 @@ const ShippingForm = () => {
               type='text'
               variant='standard'
               id='your_name'
+              name='shipperName'
+              value={ship.shipperName}
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -32,7 +41,13 @@ const ShippingForm = () => {
               fullWidth
               label='Country'
               id='country_from'
-              defaultValue={'US'}
+              defaultValue={ship.shipperCountry}
+              name='shipperCountry'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               variant='standard'
             >
               <MenuItem value={'US'}>United States of America</MenuItem>
@@ -42,6 +57,13 @@ const ShippingForm = () => {
               id='address_from'
               type='text'
               variant='standard'
+              value={ship.shipperAddress}
+              name='shipperAddress'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -49,6 +71,13 @@ const ShippingForm = () => {
               id='address_2_from'
               type='text'
               variant='standard'
+              value={ship.shipperAddress2}
+              name='shipperAddress2'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -57,6 +86,7 @@ const ShippingForm = () => {
               type='text'
               variant='standard'
               value={fromZIP}
+              name='fromZIP'
               onChange={({ target }) => dispatch(updateFromZIP(target.value))}
               fullWidth
             />
@@ -65,6 +95,13 @@ const ShippingForm = () => {
               id='city_from'
               type='text'
               variant='standard'
+              value={ship.shipperCity}
+              name='shipperCity'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -73,7 +110,13 @@ const ShippingForm = () => {
               label='State'
               id='state_from'
               variant='standard'
-              defaultValue={''}
+              value={ship.shipperState}
+              name='shipperState'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
             >
               {usaStates.map(({ abbreviation, name }) => (
                 <MenuItem key={abbreviation} value={abbreviation}>
@@ -86,6 +129,13 @@ const ShippingForm = () => {
               id='phone_from'
               type='tel'
               variant='standard'
+              value={ship.shipperPhone}
+              name='shipperPhone'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -93,6 +143,13 @@ const ShippingForm = () => {
               id='email_from'
               type='email'
               variant='standard'
+              value={ship.shipperEmail}
+              name='shipperEmail'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
           </Stack>
@@ -104,6 +161,13 @@ const ShippingForm = () => {
               id='recipient_name'
               type='text'
               variant='standard'
+              value={ship.recipientName}
+              name='recipientName'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -111,7 +175,13 @@ const ShippingForm = () => {
               fullWidth
               label='Country'
               id='country_to'
-              defaultValue={'US'}
+              defaultValue={ship.recipientCountry}
+              name='recipientCountry'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               variant='standard'
             >
               <MenuItem value={'US'}>United States of America</MenuItem>
@@ -121,6 +191,13 @@ const ShippingForm = () => {
               id='address_to'
               type='text'
               variant='standard'
+              value={ship.recipientAddress}
+              name='recipientAddress'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -128,6 +205,13 @@ const ShippingForm = () => {
               id='address_2_to'
               type='text'
               variant='standard'
+              value={ship.recipientAddress2}
+              name='recipientAddress2'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -137,6 +221,7 @@ const ShippingForm = () => {
               variant='standard'
               value={toZIP}
               onChange={({ target }) => dispatch(updateToZIP(target.value))}
+              name='toZIP'
               fullWidth
             />
             <TextField
@@ -144,6 +229,13 @@ const ShippingForm = () => {
               id='city_to'
               type='text'
               variant='standard'
+              value={ship.recipientCity}
+              name='recipientCity'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -151,7 +243,13 @@ const ShippingForm = () => {
               fullWidth
               label='State'
               id='state_to'
-              defaultValue={''}
+              value={ship.recipientState}
+              name='recipientState'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               variant='standard'
             >
               {usaStates.map(({ abbreviation, name }) => (
@@ -165,6 +263,13 @@ const ShippingForm = () => {
               id='phone_to'
               type='tel'
               variant='standard'
+              value={ship.recipientPhone}
+              name='recipientPhone'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
             <TextField
@@ -172,6 +277,13 @@ const ShippingForm = () => {
               id='email_to'
               type='email'
               variant='standard'
+              value={ship.recipientEmail}
+              name='recipientEmail'
+              onChange={({ target }) =>
+                dispatch(
+                  updateShipForm({ value: target.value, name: target.name })
+                )
+              }
               fullWidth
             />
           </Stack>

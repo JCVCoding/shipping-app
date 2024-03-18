@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import quoteReducer from './features/quote/quoteSlice';
 import fromZIPReducer from './features/fromZIP/fromZIPSlice';
 import toZIPReducer from './features/toZIP/toZIPSlice';
+import shipReducer from './features/ship/shipSlice';
 
 const store = configureStore({
   reducer: {
     quote: quoteReducer,
     fromZIP: fromZIPReducer,
     toZIP: toZIPReducer,
+    ship: shipReducer,
   },
 });
 
