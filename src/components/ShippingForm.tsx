@@ -3,8 +3,12 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { usaStates } from 'typed-usa-states';
+import { useAppSelector } from '../hooks';
 
 const ShippingForm = () => {
+  const toZIP = useAppSelector((state) => state.quote.toZIP);
+  const fromZIP = useAppSelector((state) => state.quote.fromZIP);
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
@@ -49,6 +53,7 @@ const ShippingForm = () => {
               id='ZIP_from'
               type='text'
               variant='standard'
+              value={fromZIP}
               fullWidth
             />
             <TextField
@@ -126,6 +131,7 @@ const ShippingForm = () => {
               id='ZIP_to'
               type='text'
               variant='standard'
+              value={toZIP}
               fullWidth
             />
             <TextField
