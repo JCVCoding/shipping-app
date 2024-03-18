@@ -3,9 +3,13 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { FormEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { updateForm } from '../features/quote/quoteSlice';
+import { updateFromZIP } from '../features/fromZIP/fromZIPSlice';
+import { updateToZIP } from '../features/toZIP/toZIPSlice';
 
 const QuoteForm = ({ getCards }) => {
   const quote = useAppSelector((state) => state.quote);
+  const fromZIP = useAppSelector((state) => state.fromZIP.value);
+  const toZIP = useAppSelector((state) => state.toZIP.value);
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -24,10 +28,8 @@ const QuoteForm = ({ getCards }) => {
             type='text'
             variant='standard'
             name='fromZIP'
-            value={quote.fromZIP}
-            onChange={({ target }) =>
-              dispatch(updateForm({ value: target.value, name: target.name }))
-            }
+            value={fromZIP}
+            onChange={({ target }) => dispatch(updateFromZIP(target.value))}
             fullWidth
           />
         </Grid>
@@ -38,10 +40,8 @@ const QuoteForm = ({ getCards }) => {
             type='text'
             variant='standard'
             name='toZIP'
-            value={quote.toZIP}
-            onChange={({ target }) =>
-              dispatch(updateForm({ value: target.value, name: target.name }))
-            }
+            value={toZIP}
+            onChange={({ target }) => dispatch(updateToZIP(target.value))}
             fullWidth
           />
         </Grid>

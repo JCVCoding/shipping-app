@@ -1,15 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type quotePayload = {
-  name: 'fromZIP' | 'toZIP' | 'length' | 'width' | 'height' | 'width';
+  name: 'length' | 'width' | 'height' | 'width';
   value: string;
 };
 
 export const quoteSlice = createSlice({
   name: 'quote',
   initialState: {
-    fromZIP: '',
-    toZIP: '',
     length: '',
     width: '',
     height: '',

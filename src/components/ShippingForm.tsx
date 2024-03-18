@@ -6,8 +6,8 @@ import { usaStates } from 'typed-usa-states';
 import { useAppSelector } from '../hooks';
 
 const ShippingForm = () => {
-  const toZIP = useAppSelector((state) => state.quote.toZIP);
-  const fromZIP = useAppSelector((state) => state.quote.fromZIP);
+  const toZIP = useAppSelector((state) => state.toZIP.value);
+  const fromZIP = useAppSelector((state) => state.fromZIP.value);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
