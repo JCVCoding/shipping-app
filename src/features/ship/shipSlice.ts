@@ -42,7 +42,6 @@ export const shipSlice = createSlice({
   },
   reducers: {
     updateShipForm: (state, action) => {
-      console.log(action);
       const { name, value }: { name: ShipFormFields['name']; value: string } =
         action.payload;
       state[name] = value;

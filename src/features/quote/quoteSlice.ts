@@ -15,7 +15,6 @@ export const quoteSlice = createSlice({
   },
   reducers: {
     updateForm: (state, action) => {
-      console.log(action);
       const { name, value } = action.payload as quotePayload;
       state[name] = value;
     },

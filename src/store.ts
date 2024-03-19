@@ -3,6 +3,7 @@ import quoteReducer from './features/quote/quoteSlice';
 import fromZIPReducer from './features/fromZIP/fromZIPSlice';
 import toZIPReducer from './features/toZIP/toZIPSlice';
 import shipReducer from './features/ship/shipSlice';
+import selectedQuoteReducer from './features/selectedQuote/selectedQuoteSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     fromZIP: fromZIPReducer,
     toZIP: toZIPReducer,
     ship: shipReducer,
+    selectedQuote: selectedQuoteReducer
   },
 });
 
