@@ -1,10 +1,21 @@
 import { Button, InputAdornment, TextField } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import { FormEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { updateForm } from "../features/quote/quoteSlice";
 import { updateFromZIP } from "../features/fromZIP/fromZIPSlice";
 import { updateToZIP } from "../features/toZIP/toZIPSlice";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+import { red } from "@mui/material/colors";
+
+type QuoteFormFields = {
+  fromZip: string;
+  toZip: string;
+  weight: string;
+  length: string;
+  width: string;
+  height: string;
+};
 
 const QuoteForm = ({ getCards }) => {
   const quote = useAppSelector((state) => state.quote);
@@ -12,13 +23,50 @@ const QuoteForm = ({ getCards }) => {
   const toZIP = useAppSelector((state) => state.toZIP.value);
   const dispatch = useAppDispatch();
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    getCards(true);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useForm<QuoteFormFields>();
+
+  const onSubmit: SubmitHandler<QuoteFormFields> = async () => {
+    const packageDimensionsSum =
+      Number(quote.height) + Number(quote.length) + Number(quote.width);
+    if (packageDimensionsSum > 130) {
+      setError("root", {
+        type: "custom",
+        message:
+          "Max dimensions exceeded. Total package dimensions cannot be more than 130 inches.",
+      });
+    } else {
+      clearErrors("root");
+      getCards(true);
+    }
+  };
+
+  const numberPatternValidation = {
+    value: /^[0-9]*$/,
+    message: "Zip Code can only contain numbers",
+  };
+
+  const zipCodePattern = {
+    value: /^[0-9]{5}(?:-[0-9]{4})?$/,
+    message: "Zip Code format incorrect",
+  };
+
+  const zipCodeValidation = {
+    required: "Zip Code is required",
+    minLength: {
+      value: 5,
+      message: "Zip Code needs a minimum length of 5 numbers",
+    },
+    pattern: zipCodePattern,
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={4}>
         <Grid xs={12} sm={6}>
           <TextField
@@ -26,8 +74,11 @@ const QuoteForm = ({ getCards }) => {
             placeholder="ZIP Code"
             type="text"
             variant="standard"
-            name="fromZIP"
+            // name="fromZIP"
             value={fromZIP}
+            {...register("fromZip", zipCodeValidation)}
+            error={errors.fromZip?.type ? true : false}
+            helperText={errors.fromZip?.message}
             onChange={({ target }) => dispatch(updateFromZIP(target.value))}
             fullWidth
           />
@@ -38,8 +89,10 @@ const QuoteForm = ({ getCards }) => {
             placeholder="ZIP Code"
             type="text"
             variant="standard"
-            name="toZIP"
             value={toZIP}
+            {...register("toZip", zipCodeValidation)}
+            error={errors.toZip?.type ? true : false}
+            helperText={errors.toZip?.message}
             onChange={({ target }) => dispatch(updateToZIP(target.value))}
             fullWidth
           />
@@ -49,8 +102,17 @@ const QuoteForm = ({ getCards }) => {
             label="Weight"
             type="text"
             variant="standard"
-            name="weight"
             value={quote.weight}
+            {...register("weight", {
+              required: "Weight is required",
+              pattern: numberPatternValidation,
+              max: {
+                value: 150,
+                message: "Package weight cannot be more than 150 pounds",
+              },
+            })}
+            error={errors.weight?.type ? true : false}
+            helperText={errors.weight?.message}
             onChange={({ target }) =>
               dispatch(updateForm({ value: target.value, name: target.name }))
             }
@@ -66,8 +128,13 @@ const QuoteForm = ({ getCards }) => {
           <TextField
             label="Length"
             variant="standard"
-            name="length"
             value={quote.length}
+            {...register("length", {
+              required: "Length is required",
+              pattern: numberPatternValidation,
+            })}
+            error={errors.length?.type ? true : false}
+            helperText={errors.length?.message}
             onChange={({ target }) =>
               dispatch(updateForm({ value: target.value, name: target.name }))
             }
@@ -81,7 +148,12 @@ const QuoteForm = ({ getCards }) => {
           <TextField
             label="Width"
             variant="standard"
-            name="width"
+            {...register("width", {
+              required: "Width is required",
+              pattern: numberPatternValidation,
+            })}
+            error={errors.width?.type ? true : false}
+            helperText={errors.width?.message}
             value={quote.width}
             onChange={({ target }) =>
               dispatch(updateForm({ value: target.value, name: target.name }))
@@ -96,7 +168,12 @@ const QuoteForm = ({ getCards }) => {
           <TextField
             label="Height"
             variant="standard"
-            name="height"
+            {...register("height", {
+              required: "Height is required",
+              pattern: numberPatternValidation,
+            })}
+            error={errors.height?.type ? true : false}
+            helperText={errors.height?.message}
             value={quote.height}
             onChange={({ target }) =>
               dispatch(updateForm({ value: target.value, name: target.name }))
@@ -106,6 +183,9 @@ const QuoteForm = ({ getCards }) => {
             }}
             fullWidth
           />
+        </Grid>
+        <Grid xs={12}>
+          <p style={{ color: red[300] }}>{errors.root?.message}</p>
         </Grid>
         <Grid xs={12} display={"flex"} justifyContent={"center"}>
           <Button sx={{ width: 1 / 2 }} variant="contained" type="submit">
