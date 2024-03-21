@@ -7,6 +7,8 @@ import { updateFromZIP } from "../features/fromZIP/fromZIPSlice";
 import { updateToZIP } from "../features/toZIP/toZIPSlice";
 import { updateShipForm } from "../features/ship/shipSlice";
 
+import { zipCodePattern } from "../validationPatterns/patterns";
+
 import { useForm, SubmitHandler } from "react-hook-form";
 
 type ShippingFormFields = {
@@ -106,7 +108,10 @@ const ShippingForm = () => {
               type="text"
               variant="standard"
               value={fromZIP}
-              {...register("shipperZip", { required: "Zip Code required" })}
+              {...register("shipperZip", {
+                required: "Zip Code required",
+                pattern: zipCodePattern,
+              })}
               error={errors.shipperZip?.type ? true : false}
               helperText={errors.shipperZip?.message}
               onInput={({ target }) => dispatch(updateFromZIP(target.value))}
@@ -223,7 +228,10 @@ const ShippingForm = () => {
               variant="standard"
               value={toZIP}
               onInput={({ target }) => dispatch(updateToZIP(target.value))}
-              {...register("recipientZip", { required: "Name required" })}
+              {...register("recipientZip", {
+                required: "Name required",
+                pattern: zipCodePattern,
+              })}
               error={errors.recipientZip?.type ? true : false}
               helperText={errors.recipientZip?.message}
               fullWidth

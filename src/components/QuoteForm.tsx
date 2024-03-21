@@ -6,6 +6,8 @@ import { updateFromZIP } from "../features/fromZIP/fromZIPSlice";
 import { updateToZIP } from "../features/toZIP/toZIPSlice";
 import { useForm, SubmitHandler } from "react-hook-form";
 
+import { zipCodePattern } from "../validationPatterns/patterns";
+
 import { red } from "@mui/material/colors";
 
 type QuoteFormFields = {
@@ -49,11 +51,6 @@ const QuoteForm = ({ getCards }) => {
   const numberPatternValidation = {
     value: /^[0-9]*$/,
     message: "Zip Code can only contain numbers",
-  };
-
-  const zipCodePattern = {
-    value: /^[0-9]{5}(?:-[0-9]{4})?$/,
-    message: "Zip Code format incorrect",
   };
 
   const zipCodeValidation = {
