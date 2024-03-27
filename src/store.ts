@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import billingReducer from './features/billing/billingSlice'
 import quoteReducer from './features/quote/quoteSlice';
 import fromZIPReducer from './features/fromZIP/fromZIPSlice';
 import toZIPReducer from './features/toZIP/toZIPSlice';
@@ -7,6 +8,7 @@ import selectedQuoteReducer from './features/selectedQuote/selectedQuoteSlice';
 
 const store = configureStore({
   reducer: {
+    billing: billingReducer,
     quote: quoteReducer,
     fromZIP: fromZIPReducer,
     toZIP: toZIPReducer,
