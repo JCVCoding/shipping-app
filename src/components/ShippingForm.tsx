@@ -19,7 +19,6 @@ type ShippingFormFields = {
   shipperZip: string;
   shipperEmail: string;
   recipientName: string;
-  recipientCountry: string;
   recipientAddress: string;
   recipientCity: string;
   recipientState: string;
@@ -68,18 +67,6 @@ const ShippingForm = () => {
               onInput={({ target }) => dispatchToStore(target)}
               fullWidth
             />
-            <TextField
-              select
-              fullWidth
-              label='Country'
-              id='country_from'
-              defaultValue={ship.shipperCountry}
-              name='shipperCountry'
-              onInput={({ target }) => dispatchToStore(target)}
-              variant='standard'
-            >
-              <MenuItem value={'US'}>United States of America</MenuItem>
-            </TextField>
             <TextField
               label='Street Address'
               id='address_from'
@@ -186,20 +173,6 @@ const ShippingForm = () => {
               onInput={({ target }) => dispatchToStore(target)}
               fullWidth
             />
-            <TextField
-              select
-              fullWidth
-              label='Country'
-              id='country_to'
-              defaultValue={ship.recipientCountry}
-              {...register('recipientCountry', { required: 'Name required' })}
-              error={errors.recipientCountry?.type ? true : false}
-              helperText={errors.recipientCountry?.message}
-              onChange={({ target }) => dispatchToStore(target)}
-              variant='standard'
-            >
-              <MenuItem value={'US'}>United States of America</MenuItem>
-            </TextField>
             <TextField
               label='Street Address'
               id='address_to'

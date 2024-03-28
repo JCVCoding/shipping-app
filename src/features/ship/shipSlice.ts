@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 type ShipFormFields = {
   name:
     | 'shipperName'
-    | 'shipperCountry'
     | 'shipperAddress'
     | 'shipperAddress2'
     | 'shipperCity'
@@ -11,7 +10,6 @@ type ShipFormFields = {
     | 'shipperPhone'
     | 'shipperEmail'
     | 'recipientName'
-    | 'recipientCountry'
     | 'recipientAddress'
     | 'recipientAddress2'
     | 'recipientCity'
@@ -24,7 +22,6 @@ export const shipSlice = createSlice({
   name: 'ship',
   initialState: {
     shipperName: '',
-    shipperCountry: 'US',
     shipperAddress: '',
     shipperAddress2: '',
     shipperCity: '',
@@ -32,7 +29,6 @@ export const shipSlice = createSlice({
     shipperPhone: '',
     shipperEmail: '',
     recipientName: '',
-    recipientCountry: 'US',
     recipientAddress: '',
     recipientAddress2: '',
     recipientCity: '',

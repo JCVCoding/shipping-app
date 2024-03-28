@@ -49,9 +49,14 @@ const ConfirmationPage = () => {
         </Grid>
         <Grid xs={12}>
           <Box sx={{ textAlign: 'center' }}>
+            <p>Estimated Delivery: {quote.deliveryDate}</p>
+          </Box>
+        </Grid>
+        <Grid xs={12}>
+          <Box sx={{ textAlign: 'center' }}>
             <p>
               If you have any questions, please don't hesitate to reach out to
-              hello@COMPANYNAME.com
+              hello@USPackageDelivery.com
             </p>
           </Box>
         </Grid>
@@ -62,7 +67,7 @@ const ConfirmationPage = () => {
             spacing={4}
           >
             <div>
-              <p>Shipped To information</p>
+              <p>Ship To</p>
               <p>{shippingInfo.recipientName}</p>
 
               <p>{shippingInfo.recipientAddress}</p>
@@ -70,11 +75,9 @@ const ConfirmationPage = () => {
                 {shippingInfo.recipientCity} {shippingInfo.recipientState}{' '}
                 {fromZip.value}
               </p>
-              <p>{shippingInfo.recipientCountry}</p>
             </div>
             <div>
-              <p>Billing address and Information</p>
-              <p>{billingInfo.cardName}</p>
+              <p>Billing</p>
               <p>
                 XXXXXXXX
                 {billingInfo.cardNumber.substring(
@@ -82,14 +85,22 @@ const ConfirmationPage = () => {
                   billingInfo.cardNumber.length
                 )}
               </p>
-              {billingInfo.billingAddress ? null : (
+              <p>{billingInfo.cardName}</p>
+              {billingInfo.billingAddress ? (
+                <>
+                  <p>{billingInfo.billingAddress}</p>
+                  <p>
+                    {billingInfo.billingCity} {billingInfo.billingState}{' '}
+                    {billingInfo.billingZip}
+                  </p>
+                </>
+              ) : (
                 <>
                   <p>{shippingInfo.shipperAddress}</p>
                   <p>
                     {shippingInfo.shipperCity} {shippingInfo.shipperState}{' '}
                     {fromZip.value}
                   </p>
-                  <p>{shippingInfo.shipperCountry}</p>
                 </>
               )}
             </div>
