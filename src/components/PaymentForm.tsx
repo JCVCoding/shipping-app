@@ -56,8 +56,8 @@ const CardNumberMask = forwardRef(function CardNumberMask(
   return (
     <IMaskInput
       {...other}
-      mask={amexFormat ? '#### ###### #####' : '#### #### #### ####'}
-      definitions={{ '#': /[2-6]/ }}
+      mask={amexFormat ? '@### ###### #####' : '@### #### #### ####'}
+      definitions={{ '#': /[0-9]/, '@': /[2-6]/ }}
       inputRef={ref}
       overwrite
     />
