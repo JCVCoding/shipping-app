@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Link,
+  Outlet,
+  RouterProvider,
+} from 'react-router-dom';
 
-import { Container } from '@mui/material';
+import { AppBar, Button, Container, Toolbar, Typography } from '@mui/material';
 import Home from './pages/home.tsx';
 import ShipPage from './pages/ship.tsx';
 import ShipDetails from './pages/shipDetails.tsx';
@@ -18,20 +23,43 @@ import './index.css';
 import store from './store.ts';
 import { Provider } from 'react-redux';
 
+export const Layout = () => {
+  return (
+    <>
+      <AppBar position='static'>
+        <Toolbar>
+          <Button color='inherit' component={Link} to='/'>
+            <Typography variant='h5' component={'div'}>
+              US Package Delivery Service
+            </Typography>
+          </Button>
+          <Button color='inherit'>Login</Button>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth={'lg'}>
+        <Outlet />
+      </Container>
+    </>
+  );
+};
+
 const router = createBrowserRouter([
-  { path: '/', element: <Home /> },
-  { path: '/payment', element: <Payment /> },
-  { path: '/ship', element: <ShipPage /> },
-  { path: '/ship-details', element: <ShipDetails /> },
-  { path: '/confirmation', element: <ConfirmationPage /> },
+  {
+    element: <Layout />,
+    children: [
+      { path: '/', element: <Home /> },
+      { path: '/payment', element: <Payment /> },
+      { path: '/ship', element: <ShipPage /> },
+      { path: '/ship-details', element: <ShipDetails /> },
+      { path: '/confirmation', element: <ConfirmationPage /> },
+    ],
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <Container maxWidth={'lg'}>
-        <RouterProvider router={router} />
-      </Container>
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
 );
