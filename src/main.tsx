@@ -20,6 +20,7 @@ import ShipPage from "./pages/ship.tsx";
 import ShipDetails from "./pages/shipDetails.tsx";
 import Payment from "./pages/payment.tsx";
 import ConfirmationPage from "./pages/confirmation.tsx";
+import Login from "./pages/login.tsx";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -46,11 +47,13 @@ export const Layout = () => {
                 Ship
               </Button>
             </Box>
-            <Button color="inherit">Login</Button>
+            <Button color="inherit" component={Link} to="/login">
+              Login
+            </Button>
           </Toolbar>
         </Container>
       </AppBar>
-      <Container maxWidth={"lg"}>
+      <Container maxWidth={"lg"} sx={{ margin: "2rem auto" }}>
         <Outlet />
       </Container>
     </>
@@ -62,6 +65,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "/", element: <Home /> },
+      { path: "/login", element: <Login /> },
       { path: "/payment", element: <Payment /> },
       { path: "/ship", element: <ShipPage /> },
       { path: "/ship-details", element: <ShipDetails /> },
