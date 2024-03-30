@@ -21,6 +21,7 @@ import ShipDetails from "./pages/shipDetails.tsx";
 import Payment from "./pages/payment.tsx";
 import ConfirmationPage from "./pages/confirmation.tsx";
 import Login from "./pages/login.tsx";
+import SignupForm from "./components/SignupForm.tsx";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -69,6 +70,7 @@ const router = createBrowserRouter([
       { path: "/payment", element: <Payment /> },
       { path: "/ship", element: <ShipPage /> },
       { path: "/ship-details", element: <ShipDetails /> },
+      { path: "/signup", element: <SignupForm /> },
       { path: "/confirmation", element: <ConfirmationPage /> },
     ],
   },
