@@ -22,12 +22,46 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginFormValues>();
 
-  const submitLoginForm: SubmitHandler<LoginFormValues> = (data) => {
-    console.log(data);
-    navigate("/");
+  const submitLoginForm: SubmitHandler<LoginFormValues> = async (data) => {
+    const sendCredentials = await fetch("http://localhost:3000/login", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: data.username,
+        password: data.password,
+      }),
+    });
+
+    const status = sendCredentials.ok;
+    const response = await sendCredentials.json();
+    try {
+      if (status) {
+        navigate("/");
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (err) {
+      switch (response.code) {
+        case 1:
+          setError("username", {
+            type: "custom",
+            message: response.message,
+          });
+          break;
+        case 2:
+          setError("password", {
+            type: "custom",
+            message: response.message,
+          });
+          break;
+        default:
+          break;
+      }
+    }
   };
 
   const togglePasswordVisibility = () => {
