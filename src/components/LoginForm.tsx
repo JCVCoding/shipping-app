@@ -40,6 +40,7 @@ const LoginForm = () => {
     const response = await sendCredentials.json();
     try {
       if (status) {
+        window.sessionStorage.setItem("token", response.token);
         navigate("/");
       } else {
         throw new Error(response.message);
