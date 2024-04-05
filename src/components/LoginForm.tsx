@@ -11,12 +11,16 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
+import { updateLoggedInState } from "../features/loggedIn/loggedInSlice";
+import { useAppDispatch } from "../hooks";
+
 type LoginFormValues = {
   username: string;
   password: string;
 };
 
 const LoginForm = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const {
@@ -41,6 +45,7 @@ const LoginForm = () => {
     try {
       if (status) {
         window.sessionStorage.setItem("token", response.token);
+        dispatch(updateLoggedInState(true));
         navigate("/");
       } else {
         throw new Error(response.message);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
@@ -32,22 +32,29 @@ import "./index.css";
 import store from "./store.ts";
 import { Provider } from "react-redux";
 
+import { updateLoggedInState } from "./features/loggedIn/loggedInSlice.ts";
+import { useAppDispatch, useAppSelector } from "./hooks.ts";
+
 export const Layout = () => {
+  const loggedIn = useAppSelector((state) => state.loggedIn);
+  const dispatch = useAppDispatch();
+  const [user, setUser] = useState(null);
   useEffect(() => {
-    console.log("hello");
     const token = window.sessionStorage.getItem("token");
     if (token) {
-      async () => {
-        await fetch("http://localhost:3000/login", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token!,
-          },
-        });
-      };
+      fetch("http://localhost:3000/login", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token!,
+        },
+      });
+      dispatch(updateLoggedInState(true));
+    } else {
+      console.log(token);
+      dispatch(updateLoggedInState(false));
     }
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <AppBar position="static">
@@ -64,7 +71,7 @@ export const Layout = () => {
               </Button>
             </Box>
             <Button color="inherit" component={Link} to="/login">
-              Login
+              {loggedIn.value ? "Logout" : "Login"}
             </Button>
           </Toolbar>
         </Container>
