@@ -36,7 +36,7 @@ import { Provider } from "react-redux";
 import { useAppSelector } from "./hooks.ts";
 
 export const Layout = () => {
-  const loggedIn = useAppSelector((state) => state.loggedIn);
+  const loggedIn = useAppSelector((state) => state.loggedIn.value);
   const [user, setUser] = useState(null);
 
   return (
@@ -50,16 +50,23 @@ export const Layout = () => {
                   US Package Delivery Service
                 </Typography>
               </Button>
-              <Button color="inherit" component={Link} to="/ship">
-                Ship
-              </Button>
+              {loggedIn ? (
+                <>
+                  <Button color="inherit" component={Link} to="/ship">
+                    Ship
+                  </Button>
+                  <Button color="inherit" component={Link} to="/account">
+                    Account
+                  </Button>
+                </>
+              ) : null}
             </Box>
             <Button
               color="inherit"
               component={Link}
-              to={`/${loggedIn.value ? "logout" : "login"}`}
+              to={`/${loggedIn ? "logout" : "login"}`}
             >
-              {loggedIn.value ? "Logout" : "Login"}
+              {loggedIn ? "Logout" : "Login"}
             </Button>
           </Toolbar>
         </Container>
