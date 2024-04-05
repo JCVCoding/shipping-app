@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -29,6 +29,29 @@ const LoginForm = () => {
     setError,
     formState: { errors },
   } = useForm<LoginFormValues>();
+
+  useEffect(() => {
+    const token = window.sessionStorage.getItem("token");
+    if (token) {
+      fetch("http://localhost:3000/login", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token!,
+        },
+      }).then((res) => {
+        if (res.statusText === "401") {
+          dispatch(updateLoggedInState(false));
+        } else if (res.ok) {
+          dispatch(updateLoggedInState(true));
+          navigate("/");
+        }
+      });
+    } else {
+      console.log(token);
+      dispatch(updateLoggedInState(false));
+    }
+  }, [dispatch, navigate]);
 
   const submitLoginForm: SubmitHandler<LoginFormValues> = async (data) => {
     const sendCredentials = await fetch("http://localhost:3000/login", {
