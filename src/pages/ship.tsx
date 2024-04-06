@@ -1,11 +1,15 @@
-import ShippingForm from '../components/ShippingForm';
+import { useAppSelector } from "../hooks";
+
+import ShippingForm from "../components/ShippingForm";
+import Error from "./error";
 
 const ShipPage = () => {
-  return (
-    <>
-      <ShippingForm />
-    </>
-  );
+  const loggedIn = useAppSelector((state) => state.loggedIn.value);
+  if (loggedIn) {
+    return <ShippingForm />;
+  } else {
+    return <Error />;
+  }
 };
 
 export default ShipPage;

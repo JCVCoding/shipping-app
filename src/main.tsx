@@ -34,6 +34,7 @@ import store from "./store.ts";
 import { Provider } from "react-redux";
 
 import { useAppSelector } from "./hooks.ts";
+import Error from "./pages/error.tsx";
 
 export const Layout = () => {
   const loggedIn = useAppSelector((state) => state.loggedIn.value);
@@ -90,6 +91,7 @@ const router = createBrowserRouter([
       { path: "/signup", element: <SignupForm /> },
       { path: "/confirmation", element: <ConfirmationPage /> },
       { path: "/logout", element: <Logout /> },
+      { path: "/error", element: <Error /> },
     ],
   },
 ]);
