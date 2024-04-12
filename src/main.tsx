@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
@@ -22,7 +22,6 @@ import Payment from "./pages/payment.tsx";
 import ConfirmationPage from "./pages/confirmation.tsx";
 import Login from "./pages/login.tsx";
 import SignupForm from "./components/SignupForm.tsx";
-import Logout from "./pages/logout.tsx";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -33,12 +32,13 @@ import "./index.css";
 import store from "./store.ts";
 import { Provider } from "react-redux";
 
-import { useAppSelector } from "./hooks.ts";
+import { useAppDispatch, useAppSelector } from "./hooks.ts";
+import { logout } from "./features/auth/authSlice.ts";
 import Error from "./pages/error.tsx";
 
 export const Layout = () => {
-  const loggedIn = useAppSelector((state) => state.loggedIn.value);
-  const [user, setUser] = useState(null);
+  const dispatch = useAppDispatch();
+  const loggedIn = useAppSelector((state) => state.auth.loggedIn);
 
   return (
     <>
@@ -62,13 +62,15 @@ export const Layout = () => {
                 </>
               ) : null}
             </Box>
-            <Button
-              color="inherit"
-              component={Link}
-              to={`/${loggedIn ? "logout" : "login"}`}
-            >
-              {loggedIn ? "Logout" : "Login"}
-            </Button>
+            {!loggedIn ? (
+              <Button color="inherit" component={Link} to={"/login"}>
+                Login
+              </Button>
+            ) : (
+              <Button color="inherit" onClick={() => dispatch(logout())}>
+                Logout
+              </Button>
+            )}
           </Toolbar>
         </Container>
       </AppBar>
@@ -90,7 +92,6 @@ const router = createBrowserRouter([
       { path: "/ship-details", element: <ShipDetails /> },
       { path: "/signup", element: <SignupForm /> },
       { path: "/confirmation", element: <ConfirmationPage /> },
-      { path: "/logout", element: <Logout /> },
       { path: "/error", element: <Error /> },
     ],
   },

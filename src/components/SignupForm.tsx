@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { signupUser } from "../features/auth/authAction";
 import Grid from "@mui/material/Unstable_Grid2";
 import {
   Box,
   Button,
+  CircularProgress,
   IconButton,
   Link as MUILink,
   TextField,
@@ -20,6 +23,10 @@ type SignupFormValues = {
 };
 
 const SignupForm = () => {
+  const { error, loading, success, username } = useAppSelector(
+    (state) => state.auth
+  );
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const {
@@ -28,25 +35,14 @@ const SignupForm = () => {
     formState: { errors },
   } = useForm<SignupFormValues>();
 
+  useEffect(() => {
+    console.log(success, username);
+    if (success) navigate("/login");
+    if (username) navigate("/");
+  }, [navigate, username, success]);
+
   const submitSignupForm: SubmitHandler<SignupFormValues> = (data) => {
-    fetch("http://localhost:3000/signup", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        username: data.username,
-        password: data.password,
-      }),
-    })
-      .then((res) => {
-        res.json();
-      })
-      .then(() => {
-        navigate("/login");
-      })
-      .catch((err) => console.error(err));
+    dispatch(signupUser(data));
   };
 
   const togglePasswordVisibility = () => {
@@ -124,9 +120,10 @@ const SignupForm = () => {
               type="submit"
               variant="outlined"
               sx={{ maxWidth: { sm: "12rem" } }}
+              disabled={loading}
               fullWidth
             >
-              Sign Up
+              {loading ? <CircularProgress /> : "Sign Up"}
             </Button>
           </Grid>
         </Grid>

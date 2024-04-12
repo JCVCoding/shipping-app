@@ -1,11 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit';
-import billingReducer from './features/billing/billingSlice'
-import quoteReducer from './features/quote/quoteSlice';
-import fromZIPReducer from './features/fromZIP/fromZIPSlice';
-import toZIPReducer from './features/toZIP/toZIPSlice';
-import shipReducer from './features/ship/shipSlice';
-import selectedQuoteReducer from './features/selectedQuote/selectedQuoteSlice';
-import loggedInReducer from './features/loggedIn/loggedInSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import billingReducer from "./features/billing/billingSlice";
+import quoteReducer from "./features/quote/quoteSlice";
+import fromZIPReducer from "./features/fromZIP/fromZIPSlice";
+import toZIPReducer from "./features/toZIP/toZIPSlice";
+import shipReducer from "./features/ship/shipSlice";
+import selectedQuoteReducer from "./features/selectedQuote/selectedQuoteSlice";
+import userReducer from "./features/user/userSlice";
+import authReducer from "./features/auth/authSlice";
 
 const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
     toZIP: toZIPReducer,
     ship: shipReducer,
     selectedQuote: selectedQuoteReducer,
-    loggedIn: loggedInReducer
+    user: userReducer,
+    auth: authReducer,
   },
 });
 

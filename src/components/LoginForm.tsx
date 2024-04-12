@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-import { updateLoggedInState } from "../features/loggedIn/loggedInSlice";
-import { useAppDispatch } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { loginUser } from "../features/auth/authAction";
 
 type LoginFormValues = {
   username: string;
@@ -20,6 +20,7 @@ type LoginFormValues = {
 };
 
 const LoginForm = () => {
+  const { error, success } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -31,66 +32,30 @@ const LoginForm = () => {
   } = useForm<LoginFormValues>();
 
   useEffect(() => {
-    const token = window.sessionStorage.getItem("token");
-    if (token) {
-      fetch("http://localhost:3000/login", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token!,
-        },
-      }).then((res) => {
-        if (res.statusText === "401") {
-          dispatch(updateLoggedInState(false));
-        } else if (res.ok) {
-          dispatch(updateLoggedInState(true));
-          navigate("/");
-        }
-      });
-    } else {
-      console.log(token);
-      dispatch(updateLoggedInState(false));
-    }
-  }, [dispatch, navigate]);
-
-  const submitLoginForm: SubmitHandler<LoginFormValues> = async (data) => {
-    const sendCredentials = await fetch("http://localhost:3000/login", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: data.username,
-        password: data.password,
-      }),
-    });
-
-    const status = sendCredentials.ok;
-    const response = await sendCredentials.json();
-    try {
-      if (status) {
-        window.sessionStorage.setItem("token", response.token);
-        dispatch(updateLoggedInState(true));
-        navigate("/");
-      } else {
-        throw new Error(response.message);
-      }
-    } catch (err) {
-      switch (response.code) {
-        case 1:
+    if (error) {
+      switch (error) {
+        case "1":
           setError("username", {
             type: "custom",
-            message: response.message,
+            message: "Username or email not found",
           });
           break;
-        case 2:
+        case "2":
           setError("password", {
             type: "custom",
-            message: response.message,
+            message: "Password is incorrect",
           });
           break;
         default:
           break;
       }
+    } else if (success) {
+      navigate("/");
     }
+  }, [error, setError, navigate, success]);
+
+  const submitLoginForm: SubmitHandler<LoginFormValues> = (data) => {
+    dispatch(loginUser(data));
   };
 
   const togglePasswordVisibility = () => {

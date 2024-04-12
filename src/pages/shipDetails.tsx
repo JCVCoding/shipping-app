@@ -5,6 +5,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useAppSelector } from "../hooks";
+import { useEffect, useState } from "react";
 
 const ShipDetails = () => {
   const today = new Date();
@@ -13,6 +14,19 @@ const ShipDetails = () => {
   const toZIP = useAppSelector((state) => state.toZIP.value);
   const quoteDetails = useAppSelector((state) => state.quote);
   const selectedQuoteData = useAppSelector((state) => state.selectedQuote);
+  const username = useAppSelector((state) => state.auth.username);
+  const accountNumber = useAppSelector((state) => state.user.value);
+  const [userAddress, setUserAddress] = useState(null);
+
+  const { data: address, isLoading } = useGetAccountAddressQuery(accountNumber);
+
+  useEffect(() => {
+    console.log(accountNumber, "account number data");
+    console.log(username, "username data");
+    if (!isLoading) {
+      setUserAddress(address);
+    }
+  }, [address, isLoading, username, accountNumber]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
