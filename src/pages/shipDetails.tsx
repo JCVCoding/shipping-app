@@ -8,7 +8,7 @@ import {
   InputAdornment,
   MenuItem,
 } from "@mui/material";
-import { Edit } from "@mui/icons-material";
+import { Edit, EditOff } from "@mui/icons-material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -129,12 +129,14 @@ const ShipDetails = () => {
           <p>
             {shipDetails.recipientCity}, {shipDetails.recipientState} {toZIP}
           </p>
-          <h2>Package Details</h2>
-          <IconButton
-            onClick={() => setEditPackageDetails(!editPackageDetails)}
-          >
-            <Edit />
-          </IconButton>
+          <Grid xs={12} sm={6} container gap={4} alignItems={"center"}>
+            <h2>Package Details</h2>
+            <IconButton
+              onClick={() => setEditPackageDetails(!editPackageDetails)}
+            >
+              {editPackageDetails ? <EditOff /> : <Edit />}
+            </IconButton>
+          </Grid>
           <Grid container>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Grid xs={12}>
