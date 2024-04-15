@@ -1,20 +1,38 @@
 import { Stack, Typography } from "@mui/material";
+import dayjs from "dayjs";
 
 import QuoteForm from "../components/QuoteForm";
 import QuoteCard, { QuoteData } from "../components/QuoteCard";
 import { useState } from "react";
 import { useAppSelector } from "../hooks";
+const today = dayjs();
 
 const cardData: QuoteData[] = [
-  { service: "Ground Shipping", deliveryDate: "03-23-2024", price: "$10" },
+  {
+    service: "Ground Shipping",
+    deliveryDate: `${today.add(5, "d").format("MM-DD-YYYY")}`,
+    price: "$10",
+  },
   {
     service: "Ground Expedited Shipping",
-    deliveryDate: "03-21-2024",
+    deliveryDate: `${today.add(4, "d").format("MM-DD-YYYY")}`,
     price: "$15",
   },
-  { service: "Express Shipping", deliveryDate: "03-20-2024", price: "$23" },
-  { service: "2 Day Air Shipping", deliveryDate: "03-19-2024", price: "$30" },
-  { service: "Next Day Shipping", deliveryDate: "03-18-2024", price: "$45" },
+  {
+    service: "Express Shipping",
+    deliveryDate: `${today.add(3, "d").format("MM-DD-YYYY")}`,
+    price: "$23",
+  },
+  {
+    service: "2 Day Air Shipping",
+    deliveryDate: `${today.add(2, "d").format("MM-DD-YYYY")}`,
+    price: "$30",
+  },
+  {
+    service: "Next Day Shipping",
+    deliveryDate: `${today.add(1, "d").format("MM-DD-YYYY")}`,
+    price: "$45",
+  },
 ];
 
 function Home() {

@@ -1,10 +1,11 @@
 import { Button, InputAdornment, TextField } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { updateForm } from "../features/quote/quoteSlice";
+import { updatePackageDetails } from "../features/quote/quoteSlice";
 import { updateFromZIP } from "../features/fromZIP/fromZIPSlice";
 import { updateToZIP } from "../features/toZIP/toZIPSlice";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { numberPatternValidation } from "../validationPatterns/patterns";
 
 import { zipCodePattern } from "../validationPatterns/patterns";
 
@@ -46,11 +47,6 @@ const QuoteForm = ({ getCards }) => {
       clearErrors("root");
       getCards(true);
     }
-  };
-
-  const numberPatternValidation = {
-    value: /^[0-9]*$/,
-    message: "Zip Code can only contain numbers",
   };
 
   const zipCodeValidation = {
@@ -111,7 +107,9 @@ const QuoteForm = ({ getCards }) => {
             error={errors.weight?.type ? true : false}
             helperText={errors.weight?.message}
             onChange={({ target }) =>
-              dispatch(updateForm({ value: target.value, name: target.name }))
+              dispatch(
+                updatePackageDetails({ value: target.value, name: target.name })
+              )
             }
             InputProps={{
               endAdornment: (
@@ -133,7 +131,9 @@ const QuoteForm = ({ getCards }) => {
             error={errors.length?.type ? true : false}
             helperText={errors.length?.message}
             onChange={({ target }) =>
-              dispatch(updateForm({ value: target.value, name: target.name }))
+              dispatch(
+                updatePackageDetails({ value: target.value, name: target.name })
+              )
             }
             InputProps={{
               endAdornment: <InputAdornment position="end">in.</InputAdornment>,
@@ -153,7 +153,9 @@ const QuoteForm = ({ getCards }) => {
             helperText={errors.width?.message}
             value={quote.width}
             onChange={({ target }) =>
-              dispatch(updateForm({ value: target.value, name: target.name }))
+              dispatch(
+                updatePackageDetails({ value: target.value, name: target.name })
+              )
             }
             InputProps={{
               endAdornment: <InputAdornment position="end">in.</InputAdornment>,
@@ -173,7 +175,9 @@ const QuoteForm = ({ getCards }) => {
             helperText={errors.height?.message}
             value={quote.height}
             onChange={({ target }) =>
-              dispatch(updateForm({ value: target.value, name: target.name }))
+              dispatch(
+                updatePackageDetails({ value: target.value, name: target.name })
+              )
             }
             InputProps={{
               endAdornment: <InputAdornment position="end">in.</InputAdornment>,

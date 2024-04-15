@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import billingReducer from "./features/billing/billingSlice";
 import quoteReducer from "./features/quote/quoteSlice";
 import fromZIPReducer from "./features/fromZIP/fromZIPSlice";
@@ -8,17 +8,19 @@ import selectedQuoteReducer from "./features/selectedQuote/selectedQuoteSlice";
 import userReducer from "./features/user/userSlice";
 import authReducer from "./features/auth/authSlice";
 
+const allReducers = combineReducers({
+  billing: billingReducer,
+  quote: quoteReducer,
+  fromZIP: fromZIPReducer,
+  toZIP: toZIPReducer,
+  ship: shipReducer,
+  selectedQuote: selectedQuoteReducer,
+  user: userReducer,
+  auth: authReducer,
+});
+
 const store = configureStore({
-  reducer: {
-    billing: billingReducer,
-    quote: quoteReducer,
-    fromZIP: fromZIPReducer,
-    toZIP: toZIPReducer,
-    ship: shipReducer,
-    selectedQuote: selectedQuoteReducer,
-    user: userReducer,
-    auth: authReducer,
-  },
+  reducer: allReducers,
 });
 
 export default store;

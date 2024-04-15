@@ -180,7 +180,9 @@ const ShippingForm = () => {
               type="text"
               variant="standard"
               value={ship.recipientAddress}
-              {...register("recipientAddress", { required: "Name required" })}
+              {...register("recipientAddress", {
+                required: "Address required",
+              })}
               error={errors.recipientAddress?.type ? true : false}
               helperText={errors.recipientAddress?.message}
               onInput={({ target }) => dispatchToStore(target)}
@@ -204,7 +206,7 @@ const ShippingForm = () => {
               value={toZIP}
               onInput={({ target }) => dispatch(updateToZIP(target.value))}
               {...register("recipientZip", {
-                required: "Name required",
+                required: "Zip required",
                 pattern: zipCodePattern,
               })}
               error={errors.recipientZip?.type ? true : false}
@@ -217,7 +219,7 @@ const ShippingForm = () => {
               type="text"
               variant="standard"
               value={ship.recipientCity}
-              {...register("recipientCity", { required: "Name required" })}
+              {...register("recipientCity", { required: "City required" })}
               error={errors.recipientCity?.type ? true : false}
               helperText={errors.recipientCity?.message}
               onInput={({ target }) => dispatchToStore(target)}
@@ -229,10 +231,11 @@ const ShippingForm = () => {
               label="State"
               id="state_to"
               value={ship.recipientState}
-              {...register("recipientState", { required: "Name required" })}
+              {...register("recipientState", { required: "State required" })}
               error={errors?.recipientState?.type ? true : false}
               variant="standard"
               helperText={errors.recipientState?.message}
+              autoComplete="off"
               onInput={({ target }) => {
                 dispatchToStore(target.value);
               }}
@@ -250,7 +253,7 @@ const ShippingForm = () => {
               type="email"
               variant="standard"
               value={ship.recipientEmail}
-              {...register("recipientEmail", { required: "Name required" })}
+              {...register("recipientEmail", { required: "Email required" })}
               error={errors.recipientEmail?.type ? true : false}
               helperText={errors.recipientEmail?.message}
               onInput={({ target }) => dispatchToStore(target)}
