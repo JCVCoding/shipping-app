@@ -1,21 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { QuoteData } from '../../components/QuoteCard';
+import { createSlice } from "@reduxjs/toolkit";
+import { QuoteData } from "../../components/QuoteCard";
 
 const initialState: QuoteData = {
-    service: '',
-    deliveryDate: '',
-    price: ''
-}
+  service: "",
+  deliveryDate: "",
+  price: "",
+};
 
 export const selectedQuoteSlice = createSlice({
-  name: 'selectedQuote',
+  name: "selectedQuote",
   initialState,
   reducers: {
-    selectQuote: (state, action) => {
-        const {service, deliveryDate, price} = action.payload;
-        state.service = service;
-        state.deliveryDate = deliveryDate;
-        state.price = price
+    selectQuote: (state, { payload }) => {
+      const { service, price, deliveryDate } = payload;
+      state.service = service;
+      state.price = price;
+      state.deliveryDate = deliveryDate;
     },
   },
 });

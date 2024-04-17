@@ -1,7 +1,7 @@
-import { ForwardedRef, forwardRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { ForwardedRef, forwardRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../hooks";
 
 import {
   Button,
@@ -15,21 +15,22 @@ import {
   RadioGroup,
   Stack,
   TextField,
-} from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
+} from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
 
-import { usaStates } from 'typed-usa-states';
-import { IMaskInput } from 'react-imask';
+import { usaStates } from "typed-usa-states";
+import { IMaskInput } from "react-imask";
 
-import American from '../assets/icons8-american-express-32.png';
-import Discover from '../assets/icons8-discover-card-32.png';
-import Mastercard from '../assets/icons8-mastercard-32.png';
-import Visa from '../assets/icons8-visa-32.png';
-import { updateBilling } from '../features/billing/billingSlice';
+import American from "../assets/icons8-american-express-32.png";
+import Discover from "../assets/icons8-discover-card-32.png";
+import Mastercard from "../assets/icons8-mastercard-32.png";
+import Visa from "../assets/icons8-visa-32.png";
+import { updateBilling } from "../features/billing/billingSlice";
 
-import { PaymentFormPayload } from '../features/billing/billingSlice';
+import { PaymentFormPayload } from "../features/billing/billingSlice";
+import dayjs from "dayjs";
 
 export type PaymentFormTypes = {
   cardNumber: string;
@@ -51,13 +52,13 @@ const CardNumberMask = forwardRef(function CardNumberMask(
   ref: ForwardedRef<HTMLInputElement>
 ) {
   const { cardtype, ...other } = props;
-  const amexFormat = cardtype.includes('american');
+  const amexFormat = cardtype.includes("american");
 
   return (
     <IMaskInput
       {...other}
-      mask={amexFormat ? '@### ###### #####' : '@### #### #### ####'}
-      definitions={{ '#': /[0-9]/, '@': /[2-6]/ }}
+      mask={amexFormat ? "@### ###### #####" : "@### #### #### ####"}
+      definitions={{ "#": /[0-9]/, "@": /[2-6]/ }}
       inputRef={ref}
       overwrite
     />
@@ -73,42 +74,59 @@ const ExpirationMask = forwardRef(function ExpirationMask(
   return (
     <IMaskInput
       {...other}
-      mask={'##/##'}
-      definitions={{ '#': /[0-9]/ }}
+      mask={"##/##"}
+      definitions={{ "#": /[0-9]/ }}
       inputRef={ref}
       overwrite
     />
   );
 });
 
+const generateRandomNumber = (lengthOfNum: number): string => {
+  let num = "";
+  for (let i = 0; i < lengthOfNum; i++) {
+    num += Math.floor(Math.random() * 9);
+  }
+  return num;
+};
+
+const createTrackingNumber = (accountNumber: string, serviceLevel: string) => {
+  const rand = generateRandomNumber(8);
+  return `2Z${accountNumber}${serviceLevel}${rand}`;
+};
+
 const PaymentForm = () => {
   const billing = useAppSelector((state) => state.billing);
+  const accountNumber = useAppSelector((state) => state.user.selectedAccount);
+  const deliveryDate = useAppSelector(
+    (state) => state.selectedQuote.deliveryDate
+  );
   const dispatch = useAppDispatch();
-  const [cardType, setCardType] = useState<string>('');
-  const [paymentRadio, setPaymentRadio] = useState('same');
+  const [cardType, setCardType] = useState<string>("");
+  const [paymentRadio, setPaymentRadio] = useState("same");
   const [showAddress2, setAddress2] = useState(false);
   const navigate = useNavigate();
 
   const getCreditCardType = (number: string) => {
     const firstChar = number[0];
     switch (firstChar) {
-      case '2':
+      case "2":
         setCardType(Mastercard);
         break;
-      case '3':
+      case "3":
         setCardType(American);
         break;
-      case '4':
+      case "4":
         setCardType(Visa);
         break;
-      case '5':
+      case "5":
         setCardType(Mastercard);
         break;
-      case '6':
+      case "6":
         setCardType(Discover);
         break;
       default:
-        setCardType('');
+        setCardType("");
         break;
     }
   };
@@ -119,9 +137,26 @@ const PaymentForm = () => {
     formState: { errors },
   } = useForm<PaymentFormTypes>();
 
-  const submitPayment: SubmitHandler<PaymentFormTypes> = (data) => {
-    console.log(data, errors);
-    navigate('/confirmation');
+  const submitPayment: SubmitHandler<PaymentFormTypes> = async () => {
+    const trackNumber = createTrackingNumber(accountNumber, "1478");
+    try {
+      const res = await fetch("http://localhost:3000/ship", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          trackNumber,
+          accountNumber,
+          deliveryDate,
+          shipDate: dayjs().toDate().toLocaleDateString(),
+          status: "Ready for Pickup",
+        }),
+      });
+      if (res.ok) {
+        navigate("/confirmation", { state: { trackNumber } });
+      }
+    } catch (err) {
+      console.error();
+    }
   };
 
   const dispatchToStore = (
@@ -130,7 +165,7 @@ const PaymentForm = () => {
     dispatch(
       updateBilling({
         value: target.value,
-        name: target.name as PaymentFormPayload['name'],
+        name: target.name as PaymentFormPayload["name"],
       })
     );
   };
@@ -146,11 +181,11 @@ const PaymentForm = () => {
         <Grid xs={12}>
           <TextField
             inputProps={{ cardtype: cardType }}
-            type='text'
-            variant='outlined'
-            placeholder='Card Number'
-            {...register('cardNumber', {
-              required: 'Card Number is required',
+            type="text"
+            variant="outlined"
+            placeholder="Card Number"
+            {...register("cardNumber", {
+              required: "Card Number is required",
               minLength: {
                 value: cardType !== American ? 19 : 17,
                 message: `Card Number must have a minimum of ${
@@ -166,8 +201,8 @@ const PaymentForm = () => {
             }}
             InputProps={{
               endAdornment: (
-                <InputAdornment position='end'>
-                  {cardType === '' ? (
+                <InputAdornment position="end">
+                  {cardType === "" ? (
                     <CreditCardIcon />
                   ) : (
                     <Icon sx={{ width: 32, height: 32 }}>
@@ -182,17 +217,17 @@ const PaymentForm = () => {
           />
         </Grid>
         <Grid xs={12}>
-          <Stack direction={'row'} spacing={2}>
+          <Stack direction={"row"} spacing={2}>
             <TextField
-              type='text'
-              variant='outlined'
-              label='Expiration'
-              placeholder='MM/YY'
-              {...register('expiration', {
-                required: 'Expiration month and year is required',
+              type="text"
+              variant="outlined"
+              label="Expiration"
+              placeholder="MM/YY"
+              {...register("expiration", {
+                required: "Expiration month and year is required",
                 minLength: {
                   value: 4,
-                  message: 'Invalid expiration month / year',
+                  message: "Invalid expiration month / year",
                 },
               })}
               error={errors.expiration?.type ? true : false}
@@ -203,18 +238,18 @@ const PaymentForm = () => {
               fullWidth
             />
             <TextField
-              type='text'
-              variant='outlined'
-              placeholder='CVC'
-              {...register('cvc', {
-                required: 'CVC is required',
+              type="text"
+              variant="outlined"
+              placeholder="CVC"
+              {...register("cvc", {
+                required: "CVC is required",
                 minLength: {
                   value: cardType !== American ? 3 : 4,
-                  message: 'Invalid CVC',
+                  message: "Invalid CVC",
                 },
                 maxLength: {
                   value: cardType !== American ? 3 : 4,
-                  message: 'Invalid CVC',
+                  message: "Invalid CVC",
                 },
               })}
               error={errors.cvc?.type ? true : false}
@@ -225,10 +260,10 @@ const PaymentForm = () => {
         </Grid>
         <Grid xs={12}>
           <TextField
-            type='text'
-            variant='outlined'
-            label='Name on Card'
-            {...register('cardName', { required: 'Name is required' })}
+            type="text"
+            variant="outlined"
+            label="Name on Card"
+            {...register("cardName", { required: "Name is required" })}
             error={errors.cardName?.type ? true : false}
             helperText={errors.cardName?.message}
             value={billing.cardName}
@@ -246,25 +281,25 @@ const PaymentForm = () => {
               }}
             >
               <FormControlLabel
-                value={'same'}
+                value={"same"}
                 control={<Radio />}
-                label='Same as shipping address'
+                label="Same as shipping address"
               />
               <FormControlLabel
-                value={'different'}
+                value={"different"}
                 control={<Radio />}
-                label='My billing address is different'
+                label="My billing address is different"
               />
             </RadioGroup>
           </FormControl>
         </Grid>
-        {paymentRadio === 'different' ? (
+        {paymentRadio === "different" ? (
           <Grid xs={12} container rowSpacing={2}>
             <Grid xs={12}>
               <TextField
-                label='Street Address'
-                {...register('billingAddress', {
-                  required: 'Billing address is required',
+                label="Street Address"
+                {...register("billingAddress", {
+                  required: "Billing address is required",
                 })}
                 error={errors.billingAddress?.type ? true : false}
                 helperText={errors.billingAddress?.message}
@@ -276,11 +311,11 @@ const PaymentForm = () => {
               />
             </Grid>
             <Grid xs={12}>
-              <Stack direction={'row'} alignItems={'center'} columnGap={0.5}>
+              <Stack direction={"row"} alignItems={"center"} columnGap={0.5}>
                 {!showAddress2 ? (
                   <>
                     <IconButton
-                      aria-label='add more address information'
+                      aria-label="add more address information"
                       onClick={() => setAddress2(true)}
                     >
                       <AddCircleOutlineIcon />
@@ -289,7 +324,7 @@ const PaymentForm = () => {
                   </>
                 ) : (
                   <TextField
-                    label='Apartment, Suite, Unit, Building, Floor, Etc.'
+                    label="Apartment, Suite, Unit, Building, Floor, Etc."
                     fullWidth
                   />
                 )}
@@ -297,9 +332,9 @@ const PaymentForm = () => {
             </Grid>
             <Grid xs={12} sm={4}>
               <TextField
-                label='City'
-                {...register('billingCity', {
-                  required: 'Billing city is required',
+                label="City"
+                {...register("billingCity", {
+                  required: "Billing city is required",
                 })}
                 error={errors.billingCity?.type ? true : false}
                 helperText={errors.billingCity?.message}
@@ -314,11 +349,11 @@ const PaymentForm = () => {
               <TextField
                 select
                 fullWidth
-                label='State'
-                id='state_from'
-                defaultValue={''}
-                {...register('billingState', {
-                  required: 'Billing state is required',
+                label="State"
+                id="state_from"
+                defaultValue={""}
+                {...register("billingState", {
+                  required: "Billing state is required",
                 })}
                 error={errors.billingState?.type ? true : false}
                 helperText={errors.billingState?.message}
@@ -336,9 +371,9 @@ const PaymentForm = () => {
             </Grid>
             <Grid xs={12} sm={4}>
               <TextField
-                label='ZIP Code'
-                {...register('billingZip', {
-                  required: 'Billing zip code is required',
+                label="ZIP Code"
+                {...register("billingZip", {
+                  required: "Billing zip code is required",
                 })}
                 error={errors.billingZip?.type ? true : false}
                 helperText={errors.billingZip?.message}
@@ -351,8 +386,8 @@ const PaymentForm = () => {
             </Grid>
           </Grid>
         ) : null}
-        <Grid xs={12} display={'flex'} justifyContent={'center'} sx={{ mt: 1 }}>
-          <Button fullWidth variant='contained' type='submit'>
+        <Grid xs={12} display={"flex"} justifyContent={"center"} sx={{ mt: 1 }}>
+          <Button fullWidth variant="contained" type="submit">
             Pay
           </Button>
         </Grid>

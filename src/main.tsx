@@ -35,6 +35,7 @@ import { Provider } from "react-redux";
 import { useAppDispatch, useAppSelector } from "./hooks.ts";
 import { logout } from "./features/auth/authSlice.ts";
 import Error from "./pages/error.tsx";
+import AccountPage from "./pages/account.tsx";
 
 export const Layout = () => {
   const dispatch = useAppDispatch();
@@ -93,6 +94,7 @@ const router = createBrowserRouter([
       { path: "/signup", element: <SignupForm /> },
       { path: "/confirmation", element: <ConfirmationPage /> },
       { path: "/error", element: <Error /> },
+      { path: "/account", element: <AccountPage /> },
     ],
   },
 ]);

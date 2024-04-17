@@ -12,7 +12,7 @@ import { Edit, EditOff } from "@mui/icons-material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers";
+// import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { useState } from "react";
@@ -267,7 +267,14 @@ const ShipDetails = () => {
               </Grid>
 
               <h2>Package Pick Up Date</h2>
-              <DatePicker defaultValue={dayjs()} />
+              {/* <DatePicker
+                defaultValue={dayjs()}
+                onChange={(val) => {
+                  dispatch(
+                    updatedPickupDate(val?.toDate().toLocaleDateString())
+                  );
+                }}
+              /> */}
               <p>Selected Service: {selectedQuoteData.service}</p>
               <TextField
                 select
@@ -284,7 +291,7 @@ const ShipDetails = () => {
                   </MenuItem>
                 ))}
               </TextField>
-              <p>Delivery Date and Time: {selectedQuoteData.deliveryDate}</p>
+              <p>Delivery Date: {selectedQuoteData.deliveryDate}</p>
               <p>Price: {selectedQuoteData.price}</p>
               <Button variant="contained" type="submit">
                 Continue to Payment
